@@ -5,14 +5,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar
-    class="searchbar-spacing"
-    color="medium"
-    [(ngModel)]="searchTerm"
-    (ionInput)="filterProductos($event)"
-    placeholder="Buscar producto"
-  ></ion-searchbar>
-
   <ion-button
     color="danger"
     [routerLink]="['/inventarioregistro', { accion: 'nuevo' }]"
@@ -21,19 +13,16 @@
     <strong>Registrar Inventario</strong>
   </ion-button>
 
-  <!-- Botón para seleccionar la fecha -->
   <ion-button (click)="openDateModal()">Seleccionar Fecha</ion-button>
 
   <ion-grid class="transparent-grid custom-table">
-    <!-- Fila para la fecha seleccionada -->
     <ion-row>
       <ion-col class="header col-label" color="light">Fecha</ion-col>
       <ion-col class="data col-value">{{ selectedDate }}</ion-col>
     </ion-row>
     <br />
 
-    <!-- Fila para cada producto y su detalle -->
-    <ng-container *ngFor="let producto of productos">
+    <ng-container *ngFor="let producto of productos; let i = index">
       <ion-row class="header-row">
         <ion-col class="header col-label" color="light">Producto</ion-col>
         <ion-col class="data col-value">
@@ -42,71 +31,54 @@
             size="small"
             fill="clear"
             color="primary"
-            (click)="toggleProductInfo(producto)"
+            (click)="toggleProductInfo(i)"
           >
             <ion-icon
               slot="icon-only"
-              [name]="productInfoVisible[producto.id] ? 'chevron-up-outline' : 'chevron-down-outline'"
+              [name]="productInfoVisible[i] ? 'chevron-up-outline' : 'chevron-down-outline'"
             ></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
 
-      <!-- Detalles del producto, visibles solo si está seleccionado -->
-      <ion-row *ngIf="productInfoVisible[producto.id]">
-        <ion-col class="header col-label" color="light"
-          >Cantidad inicial</ion-col
-        >
-        <ion-col class="data col-value"
-          >{{ producto.RI_CANTIDAD_INICIAL }}</ion-col
-        >
+      <ion-row *ngIf="productInfoVisible[i]">
+        <ion-col class="header col-label" color="light">Cantidad inicial</ion-col>
+        <ion-col class="data col-value">{{ producto.RI_CANTIDAD_INICIAL }}</ion-col>
       </ion-row>
 
-      <ion-row *ngIf="productInfoVisible[producto.id]">
+      <ion-row *ngIf="productInfoVisible[i]">
         <ion-col class="header col-label" color="light">
           {{ producto.RI_TIPOPRECIO === 'PVP' ? 'PVP' : 'Costo Distribución' }}
         </ion-col>
         <ion-col class="data col-value">
-          {{ producto.RI_TIPOPRECIO === 'PVP' ? producto.pvp :
-          producto.costo_distribucion }}
+          {{ producto.RI_TIPOPRECIO === 'PVP' ? producto.pvp : producto.costo_distribucion }}
         </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="productInfoVisible[producto.id]">
-        <ion-col class="header col-label" color="light"
-          >Cantidad vendida</ion-col
-        >
-        <ion-col class="data col-value"
-          >{{ producto.RF_CANTIDAD_VENDIDA }}</ion-col
-        >
+      <ion-row *ngIf="productInfoVisible[i]">
+        <ion-col class="header col-label" color="light">Cantidad vendida</ion-col>
+        <ion-col class="data col-value">{{ producto.RF_CANTIDAD_VENDIDA }}</ion-col>
       </ion-row>
 
-      <ion-row *ngIf="productInfoVisible[producto.id]">
+      <ion-row *ngIf="productInfoVisible[i]">
         <ion-col class="header col-label" color="light">Ganancia</ion-col>
-        <ion-col class="data col-value"
-          >{{ producto.RS_GANANCIA_PERDIDA }}</ion-col
-        >
+        <ion-col class="data col-value">{{ producto.RS_GANANCIA_PERDIDA }}</ion-col>
       </ion-row>
 
-      <ion-row *ngIf="productInfoVisible[producto.id]">
+      <ion-row *ngIf="productInfoVisible[i]">
         <ion-col class="header col-label" color="light">Desechos</ion-col>
-        <ion-col class="data col-value"
-          >{{ producto.TOTAL_MUESTRA_DESECHADOS }}</ion-col
-        >
+        <ion-col class="data col-value">{{ producto.TOTAL_MUESTRA_DESECHADOS }}</ion-col>
       </ion-row>
 
-      <ion-row *ngIf="productInfoVisible[producto.id]">
+      <ion-row *ngIf="productInfoVisible[i]">
         <ion-col class="header col-label" color="light">Perdida</ion-col>
-        <ion-col class="data col-value"
-          >{{ producto.RS_TOTAL_PERDIDA }}</ion-col
-        >
+        <ion-col class="data col-value">{{ producto.RS_TOTAL_PERDIDA }}</ion-col>
       </ion-row>
 
-      <ion-row *ngIf="productInfoVisible[producto.id]">
+      <ion-row *ngIf="productInfoVisible[i]">
         <ion-col class="header col-label" color="light">Opciones</ion-col>
         <ion-col class="data col-value">
           <div class="action-buttons">
-            <!-- Botón de editar -->
             <ion-button
               size="small"
               fill="clear"
@@ -129,7 +101,6 @@
     </ng-container>
   </ion-grid>
 
-  <!-- Modal para seleccionar fecha -->
   <ion-modal [isOpen]="isDateModalOpen" (ionModalDidDismiss)="onDateModalDismiss()">
     <ng-template>
       <ion-header>

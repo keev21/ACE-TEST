@@ -26,7 +26,6 @@ export class InventariomenuPage implements OnInit {
 
   ngOnInit() {
     this.idPersona = localStorage.getItem('CapacitorStorage.codigo');
-    console.log('ID Persona:', this.idPersona);
     this.setCurrentDate();
     this.selectedDate = this.currentDate;
     this.loadProducts();
@@ -34,9 +33,9 @@ export class InventariomenuPage implements OnInit {
 
   setCurrentDate() {
     const today = new Date();
-    const offset = today.getTimezoneOffset(); // Obtener el desfase horario en minutos
-    const localDate = new Date(today.getTime() - offset * 60 * 1000); // Ajustar la fecha para la zona local
-    const formattedDate = localDate.toISOString().split('T')[0]; // Obtener la fecha en formato YYYY-MM-DD
+    const offset = today.getTimezoneOffset();
+    const localDate = new Date(today.getTime() - offset * 60 * 1000);
+    const formattedDate = localDate.toISOString().split('T')[0];
     this.currentDate = formattedDate;
   }
 
@@ -56,8 +55,8 @@ export class InventariomenuPage implements OnInit {
         (response) => {
           if (response.estado) {
             this.productos = response.datos;
-            this.productos.forEach((producto) => {
-              this.productInfoVisible[producto.id] = false;
+            this.productos.forEach((producto, index) => {
+              this.productInfoVisible[index] = false;
             });
           } else {
             console.error('Error al cargar productos:', response.mensaje);
@@ -69,16 +68,12 @@ export class InventariomenuPage implements OnInit {
       );
   }
 
-  toggleProductInfo(producto: any) {
-    this.productInfoVisible[producto.id] =
-      !this.productInfoVisible[producto.id];
+  toggleProductInfo(index: number) {
+    this.productInfoVisible[index] = !this.productInfoVisible[index];
   }
 
   editarProducto(riCodigo: string, rfCodigo: string) {
-    this.router.navigate([
-      '/editinventario',
-      { ri_codigo: riCodigo, rf_codigo: rfCodigo },
-    ]);
+    this.router.navigate(['/editinventario', { ri_codigo: riCodigo, rf_codigo: rfCodigo }]);
   }
 
   async eliminarProducto(riCodigo: string) {
@@ -106,10 +101,7 @@ export class InventariomenuPage implements OnInit {
                   if (response.estado) {
                     this.loadProducts(); // Recargar productos después de eliminar
                   } else {
-                    console.error(
-                      'Error al eliminar producto:',
-                      response.mensaje
-                    );
+                    console.error('Error al eliminar producto:', response.mensaje);
                   }
                 },
                 (error) => {
@@ -125,7 +117,7 @@ export class InventariomenuPage implements OnInit {
   }
 
   openDateModal() {
-    this.modalDate = this.selectedDate; // Inicializar el modal con la fecha seleccionada
+    this.modalDate = this.selectedDate;
     this.isDateModalOpen = true;
   }
 
