@@ -91,22 +91,24 @@ export class EditinventarioPage implements OnInit {
       const updateData = {
         accion: 'actualizar_cantidad_inicial',
         ri_codigo: this.selectedProduct.RI_CODIGO,
+        
         nueva_cantidad: this.initialQuantity,
       };
 
       this.http
         .post<any>(
-          'http://localhost:8101/ACE/WsMunicipioIonic/ws_gad.php',
+          'http://localhost/ACE/WsMunicipioIonic/ws_gad.php',
           updateData
         )
         .subscribe(
           async (response) => {
+            console.log('Response:', response);
             if (response.estado) {
               await this.showToast(
                 'Cantidad inicial actualizada correctamente.'
               );
               this.router.navigate(['/inventariomenu']).then(() => {
-                window.location.reload(); // Recargar la página después de redirigir
+                window.location.reload(); 
               });
             } else {
               console.error(
@@ -126,20 +128,21 @@ export class EditinventarioPage implements OnInit {
     if (this.selectedProduct) {
       if (this.selledQuantity > this.initialQuantity) {
         await this.showToast(
-          'La cantidad final no debe exceder el valor de la cantida Inicial.'
+          'La cantidad final no debe exceder el valor de la cantidad Inicial.',
+          'danger' // Cambiar el color a rojo
         );
         return;
       }
-
-      const totalUsed =
-        this.selledQuantity + this.giftProducts + this.wasteProducts;
+  
+      const totalUsed = this.selledQuantity + this.giftProducts + this.wasteProducts;
       if (totalUsed > this.initialQuantity) {
         await this.showToast(
-          'La cantidad final no debe exceder el valor de la cantida Inicial.'
+          'La cantidad final no debe exceder el valor de la cantidad Inicial.',
+          'danger' // Cambiar el color a rojo
         );
         return;
       }
-
+  
       const updateData = {
         accion: 'actualizar_registro_final',
         rf_codigo: this.selectedProduct.RF_CODIGO,
@@ -149,39 +152,31 @@ export class EditinventarioPage implements OnInit {
         productos_desechados: this.wasteProducts,
         dinero_total: this.selledQuantity * this.selectedPvp,
       };
-
-      this.http
-        .post<any>(
-          'http://localhost/ACE/WsMunicipioIonic/ws_gad.php',
-          updateData
-        )
-        .subscribe(
-          async (response) => {
-            if (response.estado) {
-              await this.showToast('Registro final actualizado correctamente.');
-              this.router.navigate(['/inventariomenu']).then(() => {
-                window.location.reload(); // Recargar la página después de redirigir
-              });
-            } else {
-              console.error(
-                'Error al actualizar registro final:',
-                response.mensaje
-              );
-            }
-          },
-          (error) => {
-            console.error('Error en la solicitud:', error);
+  
+      this.http.post<any>('http://localhost/ACE/WsMunicipioIonic/ws_gad.php', updateData).subscribe(
+        async (response) => {
+          if (response.estado) {
+            await this.showToast('Registro final actualizado correctamente.');
+            this.router.navigate(['/inventariomenu']).then(() => {
+              window.location.reload(); // Recargar la página después de redirigir
+            });
+          } else {
+            console.error('Error al actualizar registro final:', response.mensaje);
           }
-        );
+        },
+        (error) => {
+          console.error('Error en la solicitud:', error);
+        }
+      );
     }
   }
-
-  async showToast(message: string) {
+  
+  async showToast(message: string, color: string = 'success') {
     const toast = await this.toastController.create({
       message,
       duration: 2000,
       position: 'top',
-      color: 'success',
+      color: color,
     });
     toast.present();
   }

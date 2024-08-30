@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-inventariomenu',
@@ -21,7 +22,8 @@ export class InventariomenuPage implements OnInit {
     private http: HttpClient,
     private router: Router,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -59,6 +61,7 @@ export class InventariomenuPage implements OnInit {
               this.productInfoVisible[index] = false;
             });
           } else {
+            
             console.error('Error al cargar productos:', response.mensaje);
           }
         },
@@ -125,6 +128,17 @@ export class InventariomenuPage implements OnInit {
     this.isDateModalOpen = false;
     this.selectedDate = this.modalDate;
     this.loadProducts();
+  
+    // Verificar si no hay productos después de la carga
+    if (this.productos.length === 0) {
+      const toast = await this.toastController.create({
+        message: 'No se encontraron productos para la fecha seleccionada.',
+        duration: 2000,  // Duración en milisegundos
+        position: 'top',
+        color: 'danger'
+      });
+      await toast.present();
+    }
   }
 
   closeDateModal() {
