@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
-
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-inventariomenu',
@@ -23,11 +23,18 @@ export class InventariomenuPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private modalController: ModalController,
-    private toastController: ToastController
-  ) {}
+    private toastController: ToastController,
+    private storage: Storage
+  ) {
+    this.init();
+  }
 
-  ngOnInit() {
-    this.idPersona = localStorage.getItem('CapacitorStorage.codigo');
+  private async init() {
+    await this.storage.create();
+  }
+
+  async ngOnInit() {
+    this.idPersona = await this.storage.get('codigo');
     this.setCurrentDate();
     this.selectedDate = this.currentDate;
     this.loadProducts();
@@ -35,9 +42,10 @@ export class InventariomenuPage implements OnInit {
 
   setCurrentDate() {
     const today = new Date();
-    const offset = today.getTimezoneOffset();
-    const localDate = new Date(today.getTime() - offset * 60 * 1000);
-    const formattedDate = localDate.toISOString().split('T')[0];
+    const utcDate = new Date(today.getTime() + today.getTimezoneOffset() * 6000); // Obtener la fecha en UTC
+    const offsetEcuador = -5 * 60; // Ecuador UTC-5
+    const localDateEcuador = new Date(utcDate.getTime() + offsetEcuador * 60000);
+    const formattedDate = localDateEcuador.toISOString().split('T')[0];
     this.currentDate = formattedDate;
   }
 
@@ -61,7 +69,6 @@ export class InventariomenuPage implements OnInit {
               this.productInfoVisible[index] = false;
             });
           } else {
-            
             console.error('Error al cargar productos:', response.mensaje);
           }
         },

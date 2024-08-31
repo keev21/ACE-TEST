@@ -2,12 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-inventario-registro',
   templateUrl: 'inventarioregistro.page.html',
   styleUrls: ['inventarioregistro.page.scss'],
-})export class InventarioregistroPage implements OnInit {
+})
+export class InventarioregistroPage implements OnInit {
   productId: string;
   initialQuantity: number;
   date: string;
@@ -17,18 +19,24 @@ import { ToastController } from '@ionic/angular';
   productos: any[] = [];
   initialRecordId: number;
   idPersona: string;
-  isDateModalOpen = false; //calendario
-
+  isDateModalOpen = false; // calendario
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private toastController: ToastController
-  ) {}
+    private toastController: ToastController,
+    private storage: Storage
+  ) {
+    this.init();
+  }
 
-  ngOnInit() {
-    this.idPersona = localStorage.getItem('CapacitorStorage.codigo');
+  private async init() {
+    await this.storage.create();
+  }
+
+  async ngOnInit() {
+    this.idPersona = await this.storage.get('codigo');
     this.loadProducts();
     this.setCurrentDate();
   }
@@ -51,7 +59,8 @@ import { ToastController } from '@ionic/angular';
     const today = new Date().toISOString().split('T')[0];
     this.date = today;
   }
-  //--------------------------Funciopnes necesarias para el calendario-------------------------
+
+  //--------------------------Funciones necesarias para el calendario-------------------------
   openDateModal() {
     this.isDateModalOpen = true;
   }
@@ -70,14 +79,11 @@ import { ToastController } from '@ionic/angular';
     this.closeDateModal(); 
   }
   
-  
   confirmDate(selectedDate: string) {
     this.date = selectedDate.split('T')[0];
     this.closeDateModal();
   }
-  
-  //-----------------
-
+  //---------------------------
 
   onProductChange(event: any) {
     this.productId = event.detail.value;
@@ -111,29 +117,29 @@ import { ToastController } from '@ionic/angular';
       fecha_registro: this.date,
       tipo_precio: this.tipoPrecio, // Guardar el tipo de precio seleccionado
     };
-  
+
     this.http.post<any>('http://localhost/ACE/WsMunicipioIonic/ws_gad.php', datos)
       .subscribe(
         async response => {
           if (response.estado) {
-            await this.showToast('Producto guardado exitosamente.');
+            await this.showToast('Producto guardado exitosamente.', 'success');
             this.router.navigate(['/inventariomenu']).then(() => {
               window.location.reload();
             });
           } else {
-            await this.showToast(response.mensaje); // Mostrar mensaje del servidor
+            await this.showToast(response.mensaje, 'warning'); // Mostrar mensaje del servidor
           }
         },
         error => console.error('Error en la solicitud:', error)
       );
   }
 
-  async showToast(message: string) {
+  async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message,
       duration: 2000,
       position: 'top',
-      color: 'success',
+      color, // Cambiar el color del toast según el tipo
     });
     toast.present();
   }

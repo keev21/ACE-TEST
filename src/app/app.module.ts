@@ -7,6 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
+import { IonicStorageModule } from '@ionic/storage-angular'; 
 
 // ReactiveForms
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,7 +24,8 @@ import { NgChartsModule } from 'ng2-charts';
     ReactiveFormsModule,
     AppRoutingModule,
     NgChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    IonicStorageModule.forRoot() // Configura el módulo aquí
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
