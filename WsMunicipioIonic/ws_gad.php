@@ -1029,6 +1029,8 @@ if ($post['accion'] == 'cargar_productos') {
         echo json_encode(array('estado' => false, 'mensaje' => "ID de persona no proporcionado."));
     }
 }
+
+
 if ($post['accion'] == 'obtener_cantidad_inicial') {
     $producto_id = $post['producto_id'];
 
