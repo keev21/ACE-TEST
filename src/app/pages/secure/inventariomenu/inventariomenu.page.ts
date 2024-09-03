@@ -49,6 +49,8 @@ export class InventariomenuPage implements OnInit {
     this.currentDate = formattedDate;
   }
 
+
+  
   loadProducts() {
     if (!this.idPersona) {
       console.error('ID de persona no disponible');
@@ -62,12 +64,25 @@ export class InventariomenuPage implements OnInit {
         fecha: this.selectedDate,
       })
       .subscribe(
-        (response) => {
+        async (response) => {
           if (response.estado) {
             this.productos = response.datos;
-            this.productos.forEach((producto, index) => {
-              this.productInfoVisible[index] = false;
-            });
+
+            // Verificar si la lista de productos está vacía
+            if (this.productos.length === 0) {
+              this.productos = []; // Asegurarse de que la lista de productos esté vacía
+              const toast = await this.toastController.create({
+                message: 'No se encontraron productos para la fecha seleccionada.',
+                duration: 2000,  // Duración en milisegundos
+                position: 'top',
+                color: 'danger'
+              });
+              await toast.present();
+            } else {
+              this.productos.forEach((producto, index) => {
+                this.productInfoVisible[index] = false;
+              });
+            }
           } else {
             console.error('Error al cargar productos:', response.mensaje);
           }
@@ -134,18 +149,12 @@ export class InventariomenuPage implements OnInit {
   async saveDate() {
     this.isDateModalOpen = false;
     this.selectedDate = this.modalDate;
+    
+    // Vaciar productos antes de cargar nuevos
+    this.productos = [];
+    this.productInfoVisible = {}; // Vaciar la visibilidad de los productos
+
     this.loadProducts();
-  
-    // Verificar si no hay productos después de la carga
-    if (this.productos.length === 0) {
-      const toast = await this.toastController.create({
-        message: 'No se encontraron productos para la fecha seleccionada.',
-        duration: 2000,  // Duración en milisegundos
-        position: 'top',
-        color: 'danger'
-      });
-      await toast.present();
-    }
   }
 
   closeDateModal() {
