@@ -124,7 +124,8 @@ export class InventariomenuPage implements OnInit {
               .subscribe(
                 (response) => {
                   if (response.estado) {
-                    this.loadProducts(); // Recargar productos después de eliminar
+                    this.loadProducts(); 
+                    window.location.reload();// Recargar productos después de eliminar
                   } else {
                     console.error('Error al eliminar producto:', response.mensaje);
                   }
