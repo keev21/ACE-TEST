@@ -1283,8 +1283,10 @@ if ($post['accion'] == 'cargar_productos3') {
                 p.id, 
                 p.nombre, 
                 p.pvp, 
+                p.costo_distribucion,
                 iri.RI_CODIGO, 
                 iri.RI_CANTIDAD_INICIAL, 
+                iri.RI_TIPOPRECIO,
                 iri.RI_FECHA, 
                 irf.RF_CODIGO, 
                 irf.RF_CANTIDAD_VENDIDA, 
@@ -1310,10 +1312,19 @@ if ($post['accion'] == 'cargar_productos3') {
         if (mysqli_num_rows($result) > 0) {
             $datos = array();
             while ($row = mysqli_fetch_assoc($result)) {
+                // Determina qué valor asignar a 'costo' según el tipo de precio
+                $costo = ($row['RI_TIPOPRECIO'] === 'PVP') ? $row['pvp'] : $row['costo_distribucion'];
+    
                 $datos[] = array(
+                    // este puede ser PVP o Distribuidor
+                    'RI_TIPOPRECIO' => $row['RI_TIPOPRECIO'],
+    
                     'id' => $row['id'],
                     'nombre' => $row['nombre'],
-                    'pvp' => $row['pvp'],
+    
+                    // Asigna 'costo' según el tipo de precio
+                    'costo' => $costo,
+    
                     'RI_CODIGO' => $row['RI_CODIGO'],
                     'RI_CANTIDAD_INICIAL' => $row['RI_CANTIDAD_INICIAL'],
                     'RI_FECHA' => $row['RI_FECHA'],
@@ -1328,7 +1339,8 @@ if ($post['accion'] == 'cargar_productos3') {
         } else {
             $respuesta = json_encode(array('estado' => false, 'mensaje' => "No se encontraron registros con los códigos proporcionados"));
         }
-    } else {
+    }
+    else {
         $respuesta = json_encode(array('estado' => false, 'mensaje' => 'Error en la consulta: ' . mysqli_stmt_error($stmt)));
     }
 
@@ -1384,7 +1396,7 @@ if ($post['accion'] == 'actualizar_registro_final') {
     if (mysqli_stmt_execute($stmt)) {
         // Obtener el costo_fabrica y costo_produccion del producto
         $query = "
-            SELECT  p.costo_fabrica, p.costo_produccion, p.pvp
+            SELECT  p.costo_distribucion, p.pvp, ri.RI_TIPOPRECIO
             FROM inventario_registro_inicial ri
             JOIN productos p ON ri.PROD_CODIGO = p.id
             WHERE ri.RI_CODIGO = ?
@@ -1392,12 +1404,20 @@ if ($post['accion'] == 'actualizar_registro_final') {
         $stmt = mysqli_prepare($mysqli, $query);
         mysqli_stmt_bind_param($stmt, "i", $ri_codigo);
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $costo_fabrica, $costo_produccion, $pvp);
+        mysqli_stmt_bind_result($stmt, $costo_distribucion, $pvp, $RI_TIPOPRECIO);
         mysqli_stmt_fetch($stmt);
         mysqli_stmt_close($stmt);
 
         // Calcular la ganancia/perdida
-        $ganancia_perdida = ($costo_fabrica - $costo_produccion) * $cantidad_vendida;
+        if($RI_TIPOPRECIO=="PVP")
+        {
+            $ganancia_perdida = $pvp * $cantidad_vendida;
+        }
+        else if($RI_TIPOPRECIO=="Distribuidor")
+        {
+            $ganancia_perdida = $costo_distribucion* $cantidad_vendida;
+        }
+        
 
         $perdida_regalados = $productos_muestra * $pvp;
         $productos_no_vendidos = $productos_desechados * $pvp;

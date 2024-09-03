@@ -67,7 +67,8 @@ export class EditinventarioPage implements OnInit {
               this.selectedProduct = this.productos[0];
               this.nombre = this.selectedProduct.nombre;
               this.initialQuantity = this.selectedProduct.RI_CANTIDAD_INICIAL;
-              this.selectedPvp = this.selectedProduct.pvp;
+
+              this.selectedPvp = this.selectedProduct.costo;
               this.selledQuantity =
                 this.selectedProduct.RF_CANTIDAD_VENDIDA || 0;
               this.giftProducts =
