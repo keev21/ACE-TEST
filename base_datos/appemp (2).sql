@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-07-2024 a las 16:58:06
+-- Tiempo de generación: 06-09-2024 a las 17:10:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -358,6 +358,8 @@ CREATE TABLE `costos_indirectos` (
 
 --
 -- RELACIONES PARA LA TABLA `costos_indirectos`:
+--   `producto_id`
+--       `productos` -> `id`
 --
 
 --
@@ -365,28 +367,9 @@ CREATE TABLE `costos_indirectos` (
 --
 
 INSERT INTO `costos_indirectos` (`id`, `producto_id`, `nombre`, `costo`) VALUES
-(15, 15, 'vbnbv', 3.0000000),
-(16, 16, 'XVBCV', 1.0000000),
-(57, 57, '', 1.0000000),
-(82, 82, 'ci', 1.0000000),
-(89, 98, 'gas', 0.0200000),
-(115, 138, 'ci', 124.0000000),
-(127, 18, 'raspadora', 0.0900000),
-(133, 142, '', 0.0000000),
-(134, 143, '', 0.0000000),
-(135, 144, '', 0.0000000),
-(136, 145, '', 0.0000000),
-(137, 146, '', 0.0000000),
-(138, 147, '', 0.0000000),
-(139, 148, '', 0.0000000),
-(140, 149, '', 0.0000000),
-(141, 150, '', 0.0000000),
 (170, 151, 'luz', 0.0004000),
 (171, 151, 'agua', 0.0001000),
 (172, 151, 'gas', 0.0056000),
-(179, 152, 'Luz', 0.0020000),
-(180, 152, 'Agua', 0.0008000),
-(181, 152, 'Gas', 0.0002000),
 (185, 154, 'Luz', 0.0004000),
 (186, 154, 'Agua', 0.0001000),
 (187, 154, 'Gas', 0.0056000),
@@ -395,7 +378,124 @@ INSERT INTO `costos_indirectos` (`id`, `producto_id`, `nombre`, `costo`) VALUES
 (222, 153, 'Gas', 0.0002000),
 (254, 134, 'luz', 0.0004000),
 (256, 134, 'agua', 0.0001000),
-(258, 134, 'gas', 0.0056000);
+(258, 134, 'gas', 0.0056000),
+(263, 157, 'sd', 1.0000000),
+(267, 160, 'd', 1.0000000);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventario_registro_final`
+--
+
+DROP TABLE IF EXISTS `inventario_registro_final`;
+CREATE TABLE `inventario_registro_final` (
+  `RF_CODIGO` int(11) NOT NULL,
+  `RF_CANTIDAD_VENDIDA` int(11) NOT NULL,
+  `RF_DINERO_TOTAL` decimal(10,2) NOT NULL,
+  `RF_PRODUCTOS_MUESTRA` int(11) NOT NULL,
+  `RF_PRODUCTOS_DESECHADOS` int(11) NOT NULL,
+  `RI_CODIGO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- RELACIONES PARA LA TABLA `inventario_registro_final`:
+--   `RI_CODIGO`
+--       `inventario_registro_inicial` -> `RI_CODIGO`
+--
+
+--
+-- Volcado de datos para la tabla `inventario_registro_final`
+--
+
+INSERT INTO `inventario_registro_final` (`RF_CODIGO`, `RF_CANTIDAD_VENDIDA`, `RF_DINERO_TOTAL`, `RF_PRODUCTOS_MUESTRA`, `RF_PRODUCTOS_DESECHADOS`, `RI_CODIGO`) VALUES
+(63, 10, 46.20, 0, 0, 90),
+(66, 2, 9.24, 9, 8, 93),
+(75, 0, 0.00, 0, 0, 102),
+(76, 0, 0.00, 0, 0, 103),
+(77, 0, 0.00, 0, 0, 104),
+(79, 0, 0.00, 0, 0, 106),
+(81, 1, 4.62, 1, 1, 108),
+(89, 0, 0.00, 0, 0, 116),
+(90, 0, 0.00, 0, 0, 117),
+(91, 5, 20.10, 2, 1, 118),
+(92, 0, 0.00, 0, 0, 119);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventario_registro_inicial`
+--
+
+DROP TABLE IF EXISTS `inventario_registro_inicial`;
+CREATE TABLE `inventario_registro_inicial` (
+  `RI_CODIGO` int(11) NOT NULL,
+  `RI_CANTIDAD_INICIAL` int(11) NOT NULL,
+  `RI_FECHA` date NOT NULL,
+  `RI_TIPOPRECIO` varchar(50) NOT NULL,
+  `PROD_CODIGO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- RELACIONES PARA LA TABLA `inventario_registro_inicial`:
+--   `PROD_CODIGO`
+--       `productos` -> `id`
+--
+
+--
+-- Volcado de datos para la tabla `inventario_registro_inicial`
+--
+
+INSERT INTO `inventario_registro_inicial` (`RI_CODIGO`, `RI_CANTIDAD_INICIAL`, `RI_FECHA`, `RI_TIPOPRECIO`, `PROD_CODIGO`) VALUES
+(90, 23, '2024-08-21', '', 157),
+(93, 23, '2024-08-23', '', 157),
+(102, 23, '2024-08-22', '', 157),
+(103, 2, '2024-08-22', '', 160),
+(104, 23, '2024-08-13', '', 157),
+(106, 2, '2024-08-01', '', 160),
+(108, 4, '2024-08-28', 'Distribuidor', 157),
+(116, 2, '2024-08-28', 'PVP', 160),
+(117, 10, '2024-09-05', 'PVP', 157),
+(118, 90, '2024-09-05', 'Distribuidor', 157),
+(119, 82, '2024-09-06', 'Distribuidor', 157);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventario_registro_resultado`
+--
+
+DROP TABLE IF EXISTS `inventario_registro_resultado`;
+CREATE TABLE `inventario_registro_resultado` (
+  `RS_CODIGO` int(11) NOT NULL,
+  `RS_GANANCIA_PERDIDA` decimal(10,2) NOT NULL,
+  `RS_PERDIDA_REGALADOS` decimal(10,2) NOT NULL,
+  `RS_PRODUCTOS_NO_VENDIDOS` decimal(10,2) NOT NULL,
+  `RF_CODIGO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- RELACIONES PARA LA TABLA `inventario_registro_resultado`:
+--   `RF_CODIGO`
+--       `inventario_registro_final` -> `RF_CODIGO`
+--
+
+--
+-- Volcado de datos para la tabla `inventario_registro_resultado`
+--
+
+INSERT INTO `inventario_registro_resultado` (`RS_CODIGO`, `RS_GANANCIA_PERDIDA`, `RS_PERDIDA_REGALADOS`, `RS_PRODUCTOS_NO_VENDIDOS`, `RF_CODIGO`) VALUES
+(45, 10.40, 0.00, 0.00, 63),
+(48, 2.08, 41.58, 36.96, 66),
+(57, 0.00, 0.00, 0.00, 75),
+(58, 0.00, 0.00, 0.00, 76),
+(59, 0.00, 0.00, 0.00, 77),
+(61, 0.00, 0.00, 0.00, 79),
+(63, 1.04, 4.62, 4.62, 81),
+(71, 0.00, 0.00, 0.00, 89),
+(72, 0.00, 0.00, 0.00, 90),
+(73, 20.10, 9.24, 4.62, 91),
+(74, 0.00, 0.00, 0.00, 92);
 
 -- --------------------------------------------------------
 
@@ -422,30 +522,16 @@ CREATE TABLE `mano_de_obra` (
 --
 
 INSERT INTO `mano_de_obra` (`id`, `producto_id`, `nombre`, `costo`) VALUES
-(58, 57, '', 1.0000000),
-(83, 82, 'mo', 1.0000000),
-(89, 98, 'pelar papas', 0.0500000),
-(114, 138, 'mo1', 101.0000000),
-(126, 18, 'mezclar', 0.2500000),
-(132, 142, '', 0.0000000),
-(133, 143, '', 0.0000000),
-(134, 144, '', 0.0000000),
-(135, 145, '', 0.0000000),
-(136, 146, '', 0.0000000),
-(137, 147, '', 0.0000000),
-(138, 148, '', 0.0000000),
-(139, 149, '', 0.0000000),
-(140, 150, '', 0.0000000),
 (159, 151, 'operario freidor', 0.0300000),
 (160, 151, 'operario pelador', 0.0300000),
-(165, 152, 'elaboración', 0.6000000),
-(166, 152, 'Auxiliar', 1.0700000),
 (169, 154, 'Pelador', 0.0300000),
 (170, 154, 'Freidor', 0.0300000),
 (191, 153, '1 Elaboracion', 0.6000000),
 (193, 153, '2 Auxiliar', 1.0700000),
 (215, 134, 'operario freidor', 0.0300000),
-(217, 134, 'operario pelador', 0.0300000);
+(217, 134, 'operario pelador', 0.0300000),
+(222, 157, 'asd', 2.0000000),
+(226, 160, 'dd', 2.0000000);
 
 -- --------------------------------------------------------
 
@@ -465,6 +551,8 @@ CREATE TABLE `materias_primas` (
 
 --
 -- RELACIONES PARA LA TABLA `materias_primas`:
+--   `producto_id`
+--       `productos` -> `id`
 --
 
 --
@@ -472,35 +560,10 @@ CREATE TABLE `materias_primas` (
 --
 
 INSERT INTO `materias_primas` (`id`, `producto_id`, `nombre`, `costo`, `unidad`, `cantidad`) VALUES
-(15, 15, 'xbcvv', 1.0000000, '', 0),
-(16, 16, 'DGDFH', 1.0000000, '', 0),
-(65, 57, '', 0.0000000, 'kg', 1),
-(106, 82, 'mp1', 1.0000000, 'lb', 1),
-(120, 98, 'papa', 0.1000000, 'g', 1),
-(121, 98, 'salchicha', 0.1000000, 'unid', 0),
-(122, 98, 'aceite', 0.1000000, 'mL', 10),
-(151, 138, 'mp1', 1.0000000, 'kg', 1),
-(156, 139, 'asda', 122.0000000, 'unidad', 1),
-(175, 18, 'Agua', 0.1000000, 'L', 1),
-(176, 18, 'clorantes', 2.5000000, 'g', 0.1),
-(182, 142, 'dsgb', 1.0000000, '', 0),
-(183, 143, 'dsgb', 1.0000000, 'unidad', 1),
-(184, 144, 'dsgb', 1.0000000, 'unidad', 1),
-(185, 145, 'dsgb', 1.0000000, 'unidad', 1),
-(186, 146, 'dsgb', 1.0000000, 'unidad', 1),
-(187, 147, 'dsgb', 1.0000000, 'unidad', 1),
-(188, 148, 'dsgb', 1.0000000, 'unidad', 1),
-(189, 149, 'dsgb', 1.0000000, 'unidad', 1),
-(190, 150, 'dsgb', 1.0000000, 'unidad', 1),
 (227, 151, 'papas', 0.1200000, 'g', 1),
 (228, 151, 'sal', 0.0004000, 'g', 10),
 (229, 151, 'salsa de tomate', 0.0100000, 'mL', 5),
 (230, 151, 'Aceite', 0.0500000, 'unidad', 1),
-(241, 152, 'Mortiño', 0.5800000, 'lb', 1),
-(242, 152, 'Azucar', 0.3100000, 'g', 500),
-(243, 152, 'Agua', 0.1300000, 'L', 1),
-(244, 152, 'Levadura', 0.0227000, 'g', 500),
-(245, 152, 'metabisulfito de sodio', 0.0100000, 'g', 500),
 (251, 154, 'papas', 0.1200000, 'g', 200),
 (252, 154, 'sal', 0.0000000, 'g', 10),
 (253, 154, 'salsa de tomate', 0.0100000, 'unidad', 1),
@@ -512,7 +575,9 @@ INSERT INTO `materias_primas` (`id`, `producto_id`, `nombre`, `costo`, `unidad`,
 (345, 134, 'papas', 0.1200000, 'g', 1),
 (347, 134, 'sal', 0.0000000, 'g', 10),
 (349, 134, 'salsa de tomate', 0.0100000, 'mL', 5),
-(351, 134, 'Aceite', 0.0500000, 'unidad', 1);
+(351, 134, 'Aceite', 0.0500000, 'unidad', 1),
+(359, 157, '', 2.0000000, 'g', 2),
+(362, 160, 'sd', 1.0000000, 'unidad', 1);
 
 -- --------------------------------------------------------
 
@@ -739,6 +804,8 @@ CREATE TABLE `otros_gastos` (
 
 --
 -- RELACIONES PARA LA TABLA `otros_gastos`:
+--   `producto_id`
+--       `productos` -> `id`
 --
 
 --
@@ -746,21 +813,6 @@ CREATE TABLE `otros_gastos` (
 --
 
 INSERT INTO `otros_gastos` (`id`, `producto_id`, `nombre`, `costo`) VALUES
-(2, 15, 'vnvbn', 4.0000000),
-(3, 16, 'CBCVB', 1.0000000),
-(40, 57, '', 1.0000000),
-(66, 82, 'gg', 1.0000000),
-(72, 98, 'Desechables', 0.0500000),
-(97, 138, 'gg', 123.0000000),
-(101, 142, '', 0.0000000),
-(102, 143, '', 0.0000000),
-(103, 144, '', 0.0000000),
-(104, 145, '', 0.0000000),
-(105, 146, '', 0.0000000),
-(106, 147, '', 0.0000000),
-(107, 148, '', 0.0000000),
-(108, 149, '', 0.0000000),
-(109, 150, '', 0.0000000),
 (118, 154, 'Fundas', 0.0200000),
 (119, 154, 'Etiquetas', 0.0100000),
 (146, 153, 'Botellas', 1.0300000),
@@ -768,7 +820,9 @@ INSERT INTO `otros_gastos` (`id`, `producto_id`, `nombre`, `costo`) VALUES
 (150, 153, 'Timbre', 0.0500000),
 (182, 134, 'fundas', 0.0200000),
 (184, 134, 'Etiquetas', 0.0100000),
-(186, 134, 'trasporte', 0.0025000);
+(186, 134, 'trasporte', 0.0025000),
+(191, 157, 'asd', 0.0000000),
+(195, 160, 'd', -2.0000000);
 
 -- --------------------------------------------------------
 
@@ -810,6 +864,16 @@ CREATE TABLE `persona` (
 
 --
 -- RELACIONES PARA LA TABLA `persona`:
+--   `cod_rol_persona`
+--       `roles` -> `cod_rol`
+--   `cod_tipoced_persona`
+--       `tipocedula` -> `cod_tipoced`
+--   `cod_nacionalidad_persona`
+--       `nacionalidades` -> `cod_nacionalidad`
+--   `cod_provincia_persona`
+--       `provincias` -> `cod_provincia`
+--   `cod_ciudad_persona`
+--       `ciudades` -> `cod_ciudad`
 --
 
 --
@@ -847,6 +911,8 @@ CREATE TABLE `productos` (
 
 --
 -- RELACIONES PARA LA TABLA `productos`:
+--   `id_persona`
+--       `persona` -> `cod_persona`
 --
 
 --
@@ -854,26 +920,12 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `id_persona`, `nombre`, `margen_beneficio`, `utilidad_dis`, `utilidad_venta`, `impuestos`, `costo_produccion`, `costo_fabrica`, `costo_distribucion`, `pvp`) VALUES
-(18, 105, 'Raspado de Hielo', 25.00, 0, 0, 15.00, 0.35, 0.35, 0.35, 0.35),
-(57, 105, 'Capuchino', 35.00, 0, 0, 15.00, 3.00, 4.05, 6.29, 9.76),
-(82, 106, 'paraguas', 123.00, 0, 0, 123.00, 4.00, 8.92, 44.36, 220.59),
-(98, 105, 'Salchi papa', 30.00, 0, 0, 15.00, 0.42, 0.55, 0.82, 1.22),
 (134, 210, 'papitas', 30.00, 39, 20, 12.00, 0.26, 0.34, 0.41, 0.62),
-(138, 105, 'prueba1', 12.00, 0, 0, 11.00, 349.00, 41.88, 46.49, 52.07),
-(139, 105, 'prueba2', 123.00, 0, 0, 99.00, 122.00, 150.06, 298.62, 665.92),
-(142, 105, 'vcxbx', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(143, 105, 'carlos', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(144, 105, 'fjdfjd', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(145, 105, 'zfjxjgxjn', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(146, 105, 's<nzdfnzd', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(147, 105, 'dfbz z', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(148, 105, 'rdhdj', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(149, 105, 'erajteszgn', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
-(150, 105, 'zdfnmfg', 35.00, 0, 0, 15.00, 1.00, 0.35, 0.40, 0.54),
 (151, 210, 'papitas2', 35.00, 0, 0, 12.00, 0.26, 0.35, 0.39, 0.52),
-(152, 105, 'Vino de mortiño', 44.50, 0, 0, 12.00, 4.47, 6.45, 7.23, 10.44),
 (153, 210, 'Vino Artesanal', 44.50, 0, 0, 12.00, 4.41, 6.37, 8.53, 13.46),
-(154, 210, 'Papitas 3', 30.00, 0, 0, 12.00, 0.28, 0.36, 0.40, 0.52);
+(154, 210, 'Papitas 3', 30.00, 0, 0, 12.00, 0.28, 0.36, 0.40, 0.52),
+(157, 105, 'tt', 35.00, 0, 0, 15.00, 2.98, 4.02, 4.02, 4.62),
+(160, 105, 'hhhh', 35.00, 0, 0, 15.00, 1.98, 2.67, 2.67, 3.07);
 
 -- --------------------------------------------------------
 
@@ -920,64 +972,6 @@ INSERT INTO `provincias` (`cod_provincia`, `nombre_provincia`) VALUES
 (22, 'Sucumbíos'),
 (23, 'Tungurahua'),
 (24, 'Zamora Chinchipe');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `registropr_inicial`
---
-
-DROP TABLE IF EXISTS `registropr_inicial`;
-CREATE TABLE `registropr_inicial` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `cantidad_inicial` int(11) NOT NULL,
-  `precio_venta` decimal(10,2) NOT NULL,
-  `fecha` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- RELACIONES PARA LA TABLA `registropr_inicial`:
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `registro_final`
---
-
-DROP TABLE IF EXISTS `registro_final`;
-CREATE TABLE `registro_final` (
-  `id_final` int(11) NOT NULL,
-  `id_inicial` int(11) NOT NULL,
-  `cantidad_vendida` int(11) NOT NULL,
-  `dinero_total` decimal(10,2) NOT NULL,
-  `productos_regalados` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- RELACIONES PARA LA TABLA `registro_final`:
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `resultados_inventario`
---
-
-DROP TABLE IF EXISTS `resultados_inventario`;
-CREATE TABLE `resultados_inventario` (
-  `id_resuldatos` int(11) NOT NULL,
-  `id_final` int(11) NOT NULL,
-  `ganancia_o_perdida` decimal(10,2) NOT NULL,
-  `perdida_regalados` decimal(10,2) NOT NULL,
-  `productos_no_vendidos` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- RELACIONES PARA LA TABLA `resultados_inventario`:
---
 
 -- --------------------------------------------------------
 
@@ -1046,6 +1040,27 @@ ALTER TABLE `costos_indirectos`
   ADD KEY `producto_id` (`producto_id`);
 
 --
+-- Indices de la tabla `inventario_registro_final`
+--
+ALTER TABLE `inventario_registro_final`
+  ADD PRIMARY KEY (`RF_CODIGO`),
+  ADD KEY `RI_CODIGO` (`RI_CODIGO`);
+
+--
+-- Indices de la tabla `inventario_registro_inicial`
+--
+ALTER TABLE `inventario_registro_inicial`
+  ADD PRIMARY KEY (`RI_CODIGO`),
+  ADD KEY `PROD_CODIGO` (`PROD_CODIGO`);
+
+--
+-- Indices de la tabla `inventario_registro_resultado`
+--
+ALTER TABLE `inventario_registro_resultado`
+  ADD PRIMARY KEY (`RS_CODIGO`),
+  ADD KEY `RF_CODIGO` (`RF_CODIGO`);
+
+--
 -- Indices de la tabla `mano_de_obra`
 --
 ALTER TABLE `mano_de_obra`
@@ -1099,27 +1114,6 @@ ALTER TABLE `provincias`
   ADD PRIMARY KEY (`cod_provincia`);
 
 --
--- Indices de la tabla `registropr_inicial`
---
-ALTER TABLE `registropr_inicial`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `producto_id` (`producto_id`);
-
---
--- Indices de la tabla `registro_final`
---
-ALTER TABLE `registro_final`
-  ADD PRIMARY KEY (`id_final`),
-  ADD KEY `id` (`id_inicial`);
-
---
--- Indices de la tabla `resultados_inventario`
---
-ALTER TABLE `resultados_inventario`
-  ADD PRIMARY KEY (`id_resuldatos`),
-  ADD KEY `id_final` (`id_final`);
-
---
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
@@ -1145,19 +1139,37 @@ ALTER TABLE `ciudades`
 -- AUTO_INCREMENT de la tabla `costos_indirectos`
 --
 ALTER TABLE `costos_indirectos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
+
+--
+-- AUTO_INCREMENT de la tabla `inventario_registro_final`
+--
+ALTER TABLE `inventario_registro_final`
+  MODIFY `RF_CODIGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+
+--
+-- AUTO_INCREMENT de la tabla `inventario_registro_inicial`
+--
+ALTER TABLE `inventario_registro_inicial`
+  MODIFY `RI_CODIGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+
+--
+-- AUTO_INCREMENT de la tabla `inventario_registro_resultado`
+--
+ALTER TABLE `inventario_registro_resultado`
+  MODIFY `RS_CODIGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT de la tabla `mano_de_obra`
 --
 ALTER TABLE `mano_de_obra`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=220;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
 
 --
 -- AUTO_INCREMENT de la tabla `materias_primas`
 --
 ALTER TABLE `materias_primas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=358;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
 
 --
 -- AUTO_INCREMENT de la tabla `nacionalidades`
@@ -1169,7 +1181,7 @@ ALTER TABLE `nacionalidades`
 -- AUTO_INCREMENT de la tabla `otros_gastos`
 --
 ALTER TABLE `otros_gastos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=196;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
@@ -1181,31 +1193,13 @@ ALTER TABLE `persona`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
 --
 ALTER TABLE `provincias`
   MODIFY `cod_provincia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT de la tabla `registropr_inicial`
---
-ALTER TABLE `registropr_inicial`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT de la tabla `registro_final`
---
-ALTER TABLE `registro_final`
-  MODIFY `id_final` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `resultados_inventario`
---
-ALTER TABLE `resultados_inventario`
-  MODIFY `id_resuldatos` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -1230,10 +1224,62 @@ ALTER TABLE `ciudades`
   ADD CONSTRAINT `ciudades_ibfk_1` FOREIGN KEY (`cod_ciudad_provincia`) REFERENCES `provincias` (`cod_provincia`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `costos_indirectos`
+--
+ALTER TABLE `costos_indirectos`
+  ADD CONSTRAINT `costos_indirectos_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `inventario_registro_final`
+--
+ALTER TABLE `inventario_registro_final`
+  ADD CONSTRAINT `inventario_registro_final_ibfk_1` FOREIGN KEY (`RI_CODIGO`) REFERENCES `inventario_registro_inicial` (`RI_CODIGO`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `inventario_registro_inicial`
+--
+ALTER TABLE `inventario_registro_inicial`
+  ADD CONSTRAINT `inventario_registro_inicial_ibfk_1` FOREIGN KEY (`PROD_CODIGO`) REFERENCES `productos` (`id`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `inventario_registro_resultado`
+--
+ALTER TABLE `inventario_registro_resultado`
+  ADD CONSTRAINT `inventario_registro_resultado_ibfk_1` FOREIGN KEY (`RF_CODIGO`) REFERENCES `inventario_registro_final` (`RF_CODIGO`) ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `mano_de_obra`
 --
 ALTER TABLE `mano_de_obra`
-  ADD CONSTRAINT `mano_de_obra_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `mano_de_obra_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `materias_primas`
+--
+ALTER TABLE `materias_primas`
+  ADD CONSTRAINT `materias_primas_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `otros_gastos`
+--
+ALTER TABLE `otros_gastos`
+  ADD CONSTRAINT `otros_gastos_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `persona`
+--
+ALTER TABLE `persona`
+  ADD CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`cod_rol_persona`) REFERENCES `roles` (`cod_rol`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `persona_ibfk_2` FOREIGN KEY (`cod_tipoced_persona`) REFERENCES `tipocedula` (`cod_tipoced`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `persona_ibfk_3` FOREIGN KEY (`cod_nacionalidad_persona`) REFERENCES `nacionalidades` (`cod_nacionalidad`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `persona_ibfk_5` FOREIGN KEY (`cod_provincia_persona`) REFERENCES `provincias` (`cod_provincia`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `persona_ibfk_6` FOREIGN KEY (`cod_ciudad_persona`) REFERENCES `ciudades` (`cod_ciudad`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `productos`
+--
+ALTER TABLE `productos`
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`cod_persona`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
