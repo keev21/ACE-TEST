@@ -21,6 +21,7 @@ export class InventarioregistroPage implements OnInit {
   idPersona: string;
   isDateModalOpen = false;
 
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -94,14 +95,21 @@ export class InventarioregistroPage implements OnInit {
     if (product) {
       this.selectedPvp = product.pvp;
       this.costo_distribucion = product.costo_distribucion;
-      this.loadInitialQuantity(this.productId);
+      //this.loadInitialQuantity(this.productId);
     }
   }
+  onPriceTypeChange(event: any) {
+    this.tipoPrecio = event.detail.value;
+    this.loadInitialQuantity(this.productId);  // Aquí se carga la cantidad inicial del producto
+  }
+  
+  
 
   loadInitialQuantity(productId: string) {
     this.http.post<any>('http://localhost/ACE/WsMunicipioIonic/ws_gad.php', {
       accion: 'obtener_cantidad_inicial',
       producto_id: productId,
+      tipo_precio: this.tipoPrecio
     }).subscribe(
       response => {
         if (response.estado) {

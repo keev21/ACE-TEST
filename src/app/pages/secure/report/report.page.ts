@@ -3,6 +3,7 @@ import { ReportService } from 'src/app/services/report/report.service';
 import { Chart } from 'chart.js';
 
 @Component({
+  
   selector: 'app-report',
   templateUrl: './report.page.html',
   styleUrls: ['./report.page.scss'],
@@ -85,7 +86,7 @@ export class ReportPage {
         this.currentPage = response.pagination.current_page;
         this.totalPages = response.pagination.total_pages;
         this.isAccordionOpen = false;
-
+        
         setTimeout(() => {
           this.loadChart();
         }, 500);

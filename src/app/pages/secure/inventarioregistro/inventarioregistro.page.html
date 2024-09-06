@@ -27,28 +27,32 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
+      <!-- aqui quiero poner el ionchange en vez de producto -->
+      <!-- ionChange para el tipo de precio -->
+<ion-radio-group [(ngModel)]="tipoPrecio" (ionChange)="onPriceTypeChange($event)">
+  <ion-list-header>
+    <ion-label>Seleccionar tipo de precio</ion-label>
+  </ion-list-header>
 
-      <ion-item>
-        <ion-label position="floating">Cantidad Inicial</ion-label>
-        <ion-input type="number" [(ngModel)]="initialQuantity"></ion-input>
-      </ion-item>
+  <ion-item>
+    <ion-label>PVP: {{ selectedPvp }}</ion-label>
+    <ion-radio slot="start" value="PVP"></ion-radio>
+  </ion-item>
 
-      <!-- Radio Buttons para seleccionar PVP o Precio distribuidor -->
-      <ion-radio-group [(ngModel)]="tipoPrecio">
-        <ion-list-header>
-          <ion-label>Seleccionar tipo de precio</ion-label>
-        </ion-list-header>
+  <ion-item>
+    <ion-label>Precio distribuidor: {{ costo_distribucion }}</ion-label>
+    <ion-radio slot="start" value="Distribuidor"></ion-radio>
+  </ion-item>
+</ion-radio-group>
 
-        <ion-item>
-          <ion-label>PVP: {{ selectedPvp }}</ion-label>
-          <ion-radio slot="start" value="PVP"></ion-radio>
-        </ion-item>
+<ion-item>
+  <ion-label position="floating">Cantidad Inicial</ion-label>
+  <ion-input type="number" [(ngModel)]="initialQuantity"></ion-input>
+</ion-item>
 
-        <ion-item>
-          <ion-label>Precio distribuidor: {{ costo_distribucion }}</ion-label>
-          <ion-radio slot="start" value="Distribuidor"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
+
+
+      
 
       <!-- Nuevo formato de fecha para el guardado -->
       <ion-item>

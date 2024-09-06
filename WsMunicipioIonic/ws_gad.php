@@ -1032,7 +1032,11 @@ if ($post['accion'] == 'cargar_productos') {
 
 
 if ($post['accion'] == 'obtener_cantidad_inicial') {
+    date_default_timezone_set('America/Guayaquil');
+    $fechaActual = date('Y-m-d H:i:s');
+    $fechaAnterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime($fechaActual)));
     $producto_id = $post['producto_id'];
+    $tipo_precio = $post['tipo_precio'];
 
     $sentencia = "
         SELECT 
@@ -1042,6 +1046,8 @@ if ($post['accion'] == 'obtener_cantidad_inicial') {
         FROM inventario_registro_inicial iri
         INNER JOIN inventario_registro_final irf ON iri.RI_CODIGO = irf.RI_CODIGO
         WHERE iri.PROD_CODIGO = '$producto_id'
+        AND iri.RI_FECHA <= '$fechaAnterior'
+        AND iri.RI_TIPOPRECIO = '$tipo_precio'
         ORDER BY iri.RI_FECHA DESC
         LIMIT 1";
 
@@ -1054,11 +1060,13 @@ if ($post['accion'] == 'obtener_cantidad_inicial') {
             'cantidad_inicial' => $row['cantidad_actual']
         ));
     } else {
-        $respuesta = json_encode(array('estado' => false, 'mensaje' => "No se encontró cantidad inicial para este producto"));
+        $respuesta = json_encode(array('estado' => false, 'mensaje' => "No se encontró cantidad inicial para este producto o tipo de precio"));
     }
 
     echo $respuesta;
 }
+
+
 // Guardar registro final
 if ($post['accion'] == 'guardar_registro_final') {
     $registro_inicial_id = $post['registro_inicial_id'];
