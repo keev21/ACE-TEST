@@ -131,6 +131,7 @@ export class InventarioregistroPage implements OnInit {
         async response => {
           if (response.estado) {
             await this.showToast('Producto guardado exitosamente.', 'success');
+            this.clearData();
             // Navegar de vuelta al menú de inventario sin recargar
             this.router.navigate(['/inventariomenu'], { state: { updated: true } });
           } else {
@@ -149,5 +150,14 @@ export class InventarioregistroPage implements OnInit {
       color,
     });
     toast.present();
+  }
+  //limpiar datos
+  clearData() {
+    this.productId = null;
+    this.initialQuantity = null;
+    
+    this.selectedPvp = null;
+    this.costo_distribucion = null;
+    this.tipoPrecio = null;
   }
 }

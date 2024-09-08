@@ -104,43 +104,44 @@ export class InventariomenuPage implements OnInit {
     this.router.navigate(['/editinventario', { ri_codigo: riCodigo, rf_codigo: rfCodigo }]);
   }
 
-  async eliminarProducto(riCodigo: string) {
-    const alert = await this.alertController.create({
-      header: 'Confirmar eliminación',
-      message: '¿Estás seguro de que deseas eliminar este producto?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancelado');
-          },
+ async eliminarProducto(riCodigo: string) {
+  const alert = await this.alertController.create({
+    header: 'Confirmar eliminación',
+    message: '¿Estás seguro de que deseas eliminar este producto?',
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancelado');
         },
-        {
-          text: 'Eliminar',
-          handler: () => {
-            this.http.post<any>('http://localhost/ACE/WsMunicipioIonic/ws_gad.php', {
-              accion: 'eliminar',
-              RI_CODIGO: riCodigo,
-            }).subscribe(
-              (response) => {
-                if (response.estado) {
-                  this.loadProducts(); // Recargar productos después de eliminar
-                } else {
-                  console.error('Error al eliminar producto:', response.mensaje);
-                }
-              },
-              (error) => {
-                console.error('Error en la solicitud:', error);
+      },
+      {
+        text: 'Eliminar',
+        handler: () => {
+          this.http.post<any>('http://localhost/ACE/WsMunicipioIonic/ws_gad.php', {
+            accion: 'eliminar',
+            RI_CODIGO: riCodigo,
+          }).subscribe(
+            async (response) => {
+              if (response.estado) {
+                // Actualizar la lista de productos localmente
+                this.productos = this.productos.filter(producto => producto.RI_CODIGO !== riCodigo);
+                // Mostrar mensaje de éxito
+               // await this.showToast('Producto eliminado correctamente.');
+              } else {
+                //await this.showToast('Error al eliminar producto.', 'danger');
               }
-            );
-          },
+            },
+            error => console.error('Error en la solicitud:', error)
+          );
         },
-      ],
-    });
+      },
+    ],
+  });
 
-    await alert.present();
-  }
+  await alert.present();
+}
 
   openDateModal() {
     this.modalDate = this.selectedDate;
