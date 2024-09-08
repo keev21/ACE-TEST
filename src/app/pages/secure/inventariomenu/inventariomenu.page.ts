@@ -39,11 +39,11 @@ export class InventariomenuPage implements OnInit {
     this.setCurrentDate();
     this.selectedDate = this.currentDate;
     this.loadProducts();
-
-    // Verificar si viene desde editinventario
+  
+    // Verificar si viene desde otra página después de guardar un producto
     this.route.queryParams.subscribe((params) => {
       if (this.router.getCurrentNavigation()?.extras.state?.updated) {
-        this.loadProducts(); // Recargar productos si se actualizó algo
+        this.loadProducts();  // Recargar productos si se ha actualizado algo
       }
     });
   }
